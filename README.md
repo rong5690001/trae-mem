@@ -5,6 +5,8 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[中文](README.md) | [English](README_EN.md)
+
 `trae-mem` 是一个轻量级的上下文管理系统，旨在解决 AI 编程过程中的“会话遗忘”问题。它将你的每一次 Trae 会话、工具调用、关键决策持久化到本地 SQLite 数据库，并在会话结束时自动生成压缩摘要。在新的会话中，它能智能检索相关历史，并生成可直接注入的上下文块，让 AI 越用越懂你。
 
 ---
