@@ -34,7 +34,17 @@ cd trae-mem
 
 ### 2. 配置 Trae
 
-编辑 Trae 的配置文件 `~/Library/Application Support/Trae/User/mcp.json`，添加以下内容：
+**✨ 一键安装（推荐）**
+
+直接运行提供的安装脚本，自动将配置写入 Trae 的 `mcp.json`：
+
+```bash
+python3 scripts/install_mcp.py
+```
+
+**手动配置**
+
+如果脚本执行失败，你也可以手动编辑 Trae 的配置文件 `~/Library/Application Support/Trae/User/mcp.json`，添加以下内容：
 
 ```json
 {
