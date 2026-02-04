@@ -1,0 +1,158 @@
+<mxfile host="app.diagrams.net" modified="2026-02-04T00:00:00.000Z" agent="trae-mem" version="24.7.8" type="device">
+  <diagram id="arch-1" name="Architecture">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0b0f14;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1600" height="900" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="title" value="trae-mem 架构与数据流（本地持久化记忆系统）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontColor=#ffffff;fontSize=22;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="30" width="1600" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Module containers (dashed borders) -->
+        <mxCell id="m1" value="Trae IDE / Client Side&#xa;技术栈：Trae + MCP Client&#xa;性能：本地调用，零网络延迟" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#121a22;strokeColor=#ffffff;dashed=1;dashPattern=10 6;strokeWidth=2;fontColor=#ffffff;fontStyle=1;align=left;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="340" height="560" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="m2" value="MCP Server Interface&#xa;技术栈：JSON-RPC 2.0 + stdio&#xa;性能：吞吐取决于工具调用频率" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#121a22;strokeColor=#ffffff;dashed=1;dashPattern=10 6;strokeWidth=2;fontColor=#ffffff;fontStyle=1;align=left;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="120" width="340" height="560" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="m3" value="Core Logic Layer&#xa;技术栈：Python 标准库&#xa;性能：检索/拼装通常为毫秒级（与规模/磁盘有关）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#121a22;strokeColor=#ffffff;dashed=1;dashPattern=10 6;strokeWidth=2;fontColor=#ffffff;fontStyle=1;align=left;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="860" y="120" width="340" height="560" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="m4" value="Persistence Layer&#xa;技术栈：SQLite + FTS5 + WAL&#xa;性能：单文件落盘；FTS5 支持 BM25 排序" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#121a22;strokeColor=#ffffff;dashed=1;dashPattern=10 6;strokeWidth=2;fontColor=#ffffff;fontStyle=1;align=left;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="120" width="280" height="560" as="geometry"/>
+        </mxCell>
+
+        <!-- Client nodes -->
+        <mxCell id="c1" value="User Prompt&#xa;（用户输入）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="95" y="220" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="c2" value="Tool Use&#xa;（工具执行/结果）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="95" y="310" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="c3" value="MCP Client&#xa;（Trae 内置）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="95" y="420" width="270" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- MCP server nodes -->
+        <mxCell id="s1" value="Stdio Transport&#xa;stdin/stdout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="495" y="270" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s2" value="Request Dispatcher&#xa;tools/list | tools/call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="495" y="370" width="270" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Core nodes -->
+        <mxCell id="k1" value="Session Manager&#xa;start/log/end" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="220" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="k2" value="Summarizer&#xa;brief/detailed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="310" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="k3" value="Search Engine&#xa;FTS5 + BM25" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="400" width="270" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="k4" value="Context Injector&#xa;inject block" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="490" width="270" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Storage nodes -->
+        <mxCell id="d1" value="SQLite DB&#xa;WAL 模式" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1295" y="260" width="210" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="d2" value="Tables&#xa;sessions / observations / summaries&#xa;+ observations_fts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2a36;strokeColor=#ffffff;fontColor=#ffffff;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1295" y="370" width="210" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- Anchors outside modules to keep arrows outside -->
+        <mxCell id="a1" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="410" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="a2" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="450" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a3" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="810" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="a4" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="850" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a5" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+        <mxCell id="a6" value="" style="ellipse;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="455" width="10" height="10" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="MCP 调用&#xa;JSON-RPC over stdio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="a1" target="a2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="440" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e2" value="分发/路由&#xa;tools/list / tools/call" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="a3" target="a4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e3" value="读写/检索&#xa;FTS5 + WAL" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="a5" target="a6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e4" value="1. 用户输入 / 工具结果" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="c1" target="c3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;" edge="1" parent="1" source="c2" target="c3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e6" value="2. 进入 MCP Server" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="c3" target="s1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="455" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;" edge="1" parent="1" source="s1" target="s2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e8" value="3. 调用核心逻辑" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="s2" target="k1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="810" y="455" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e9" value="写入/结束时摘要" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="k1" target="k2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e10" value="检索" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="k1" target="k3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e11" value="拼装注入块" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="k3" target="k4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e12" value="4. 落库与读取" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;fontColor=#ffffff;labelBackgroundColor=#0b0f14;" edge="1" parent="1" source="k2" target="d1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1210" y="455" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#ffffff;" edge="1" parent="1" source="d1" target="d2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
