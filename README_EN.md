@@ -63,7 +63,7 @@ If the script fails, you can manually edit Trae's configuration file `~/Library/
 }
 ```
 
-> **Note**: Please replace `/path/to/your/trae-mem` with the actual path where you cloned the repository (e.g., `/Users/chenhuarong/workspace/trae-mem`). It is recommended to use an absolute path for the Python interpreter.
+> **Note**: Please replace `/path/to/your/trae-mem` with the actual path where you cloned the repository (e.g., `/Users/yourname/workspace/trae-mem`). It is recommended to use an absolute path for the Python interpreter.
 
 ### 3. Start Using
 

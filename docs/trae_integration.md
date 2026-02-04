@@ -23,8 +23,8 @@ Trae 是基于 VS Code 内核的 IDE，目前最稳定、可配置的“扩展�
       "command": "/usr/bin/python3", 
       "args": ["-m", "trae_mem.mcp_server"],
       "env": {
-        "PYTHONPATH": "/Users/chenhuarong/workspace/trae-mem",
-        "TRAE_MEM_HOME": "/Users/chenhuarong/.trae-mem"
+        "PYTHONPATH": "/path/to/your/trae-mem",
+        "TRAE_MEM_HOME": "/Users/yourname/.trae-mem"
       }
     }
   }
@@ -32,7 +32,7 @@ Trae 是基于 VS Code 内核的 IDE，目前最稳定、可配置的“扩展�
 ```
 
 > **提示**：
-> 1. 请将 `/Users/chenhuarong/workspace/trae-mem` 替换为你实际的仓库克隆路径。
+> 1. 请将 `/path/to/your/trae-mem` 替换为你实际的仓库克隆路径。
 > 2. `command` 建议使用绝对路径（如 `/usr/bin/python3` 或 `/opt/homebrew/bin/python3`），以确保环境一致。
 
 ### 1.3 可用工具

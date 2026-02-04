@@ -63,7 +63,7 @@ python3 scripts/install_mcp.py
 }
 ```
 
-> **注意**: 请将 `/path/to/your/trae-mem` 替换为你实际克隆的仓库路径（例如 `/Users/chenhuarong/workspace/trae-mem`）。建议使用绝对路径的 Python 解释器。
+> **注意**: 请将 `/path/to/your/trae-mem` 替换为你实际克隆的仓库路径（例如 `/Users/yourname/workspace/trae-mem`）。建议使用绝对路径的 Python 解释器。
 
 ### 3. 开始使用
 
