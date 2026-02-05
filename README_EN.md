@@ -109,6 +109,7 @@ Control behavior via environment variables:
 ## 📚 Documentation
 
 - [Trae Integration Guide](docs/trae_integration.md)
+- [Tech Blog Hub: Deep Dive into Trae-Mem](blog/trae-mem-tech-deep-dive.md)
 
 ## 📄 License
 

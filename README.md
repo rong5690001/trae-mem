@@ -109,6 +109,7 @@ python3 -m trae_mem.cli inject --query "播放器优化"
 ## 📚 文档
 
 - [Trae 集成指南](docs/trae_integration.md)
+- [技术博客总览：深度解析 Trae-Mem](blog/trae-mem-tech-deep-dive.md)
 
 ## 📄 License
 
