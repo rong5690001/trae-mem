@@ -1,8 +1,18 @@
-# 给 AI 装个“海马体”：Trae-Mem 本地记忆系统技术内幕
+# 深度解析 Trae-Mem：如何构建轻量级、本地化的 AI 编程助手记忆层
 
 > **摘要**：你是否遇到过这样的场景：在 Trae IDE 里和 AI 聊得火热，解决了 A 模块的 Bug，转头去改 B 模块，再问 A 模块时 AI 却“失忆”了？或者第二天打开新会话，不得不把昨天的背景重说一遍？本文将带你深入 `trae-mem` 的技术实现，看我们如何用不到 1000 行 Python 代码，基于 SQLite 和 MCP 协议，为 Trae IDE 打造一个**本地化、持久化、隐私安全**的“第二大脑”。
 
 ---
+
+## 系列文章导航
+
+这篇文章是总览入口。想系统掌握实现细节，建议按下面顺序阅读：
+
+- 《01｜存储与检索：用 SQLite + FTS5 搭一个“可带走”的记忆库》→ [01-storage-and-retrieval.md](./01-storage-and-retrieval.md)
+- 《02｜生命周期挂钩：把“对话/工具调用”变成可回放的事件流》→ [02-session-lifecycle-hooks.md](./02-session-lifecycle-hooks.md)
+- 《03｜压缩与摘要：让“会话日志”变成可注入的短记忆》→ [03-compression-and-summarization.md](./03-compression-and-summarization.md)
+- 《04｜MCP 服务接口：让本地能力变成 Agent 可调用的 Tools》→ [04-mcp-service-interface.md](./04-mcp-service-interface.md)
+- 加餐：《彻底搞懂 MCP：Trae、Agent 与插件服务端的“三角协同”原理解析》→ [mcp-architecture-deep-dive.md](./mcp-architecture-deep-dive.md)
 
 ## 1. 为什么我们需要一个“外挂大脑”？
 
@@ -33,6 +43,13 @@
 ## 3. 核心架构与实现原理
 
 `trae-mem` 的工作流可以概括为：**记录 (Log) -> 沉淀 (Summarize) -> 唤起 (Inject)**。
+
+把它拆成工程模块，就是四块核心能力：
+
+- 存储与检索：把事件落盘，并支持全文检索与时间线复盘
+- 生命周期挂钩：把 IDE 行为变成结构化事件流（Observations）
+- 压缩与摘要：把会话日志压缩成 brief/detailed 两层可注入记忆
+- MCP 服务接口：把上述能力以 Tools 形式暴露给 Agent 调用
 
 下面这张架构图展示了数据是如何在 Trae IDE 和本地数据库之间流转的：
 
@@ -105,26 +122,13 @@ graph TD
 
 ### 3.1 持久化层：不仅仅是 Log
 
-我们定义了一个通用的数据单元：**Observation (观测)**。
-无论是用户的提问、AI 的回复，还是工具（如 `Grep`、`Read File`）的执行结果，都被视为一次 Observation。
+持久化层的核心是三张表：`sessions / observations / summaries`（见 `TraeMemDB.init_schema()`）。其中 **observations** 是“事件溯源”的载体：用户输入、工具输入/输出、关键 note/decision 都会以统一结构落盘，并通过 FTS5 建倒排索引来实现快速检索。
 
-```python
-@dataclass
-class Observation:
-    id: str
-    session_id: str
-    kind: str      # user | tool | model | note
-    content: str   # 实际内容
-    private: bool  # 隐私标记
-    # ...
-```
-
-在 SQLite 中，我们利用 **FTS5 (Full-Text Search 5)** 扩展模块建立了倒排索引。这意味着，即使你存了 10 万条对话记录，通过关键词（如“预加载策略”）检索，也能在毫秒级返回结果。
+详见：《01｜存储与检索》→ [01-storage-and-retrieval.md](./01-storage-and-retrieval.md)
 
 ### 3.2 隐私安全：`<private>` 标签
 
-在设计之初，我们就把隐私放在第一位。开发者经常会在代码里贴 API Key 或内部 IP。
-`trae-mem` 实现了一个简单的过滤器：
+在设计之初，我们就把隐私放在第一位。开发者经常会在代码里贴 API Key 或内部 IP。`trae-mem` 约定用 `<private>...</private>` 包裹敏感片段，并在写入/摘要阶段做清洗与隔离。
 
 ```python
 def remove_private(text: str) -> str:
@@ -133,6 +137,8 @@ def remove_private(text: str) -> str:
 ```
 
 当检测到 `<private>` 标签时，原始内容会被清洗，**不会**进入 FTS 索引，也不会被存储在明文字段中（或者只存储脱敏后的版本，取决于配置）。
+
+详见：《03｜压缩与摘要》→ [03-compression-and-summarization.md](./03-compression-and-summarization.md)
 
 ### 3.3 渐进式检索：Search -> Timeline
 
@@ -143,6 +149,8 @@ def remove_private(text: str) -> str:
 2.  **Timeline**: 拿到命中点的 `session_id` 和 `timestamp`，查询 `timestamp ± window` 范围内的所有记录。
 
 这种“点面结合”的检索方式，能极其精准地还原当时的思维现场。
+
+详见：《01｜存储与检索》→ [01-storage-and-retrieval.md](./01-storage-and-retrieval.md)
 
 ### 3.4 上下文注入 (Injection)
 
@@ -162,6 +170,11 @@ def remove_private(text: str) -> str:
 ```
 
 这个 Block 可以通过 MCP 工具直接喂给 Trae 的当前会话，让 AI 瞬间“想起”之前的上下文。
+
+实现细节详见：
+
+- 《04｜MCP 服务接口》→ [04-mcp-service-interface.md](./04-mcp-service-interface.md)
+- 《加餐：MCP 三角协同》→ [mcp-architecture-deep-dive.md](./mcp-architecture-deep-dive.md)
 
 ---
 
